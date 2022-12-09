@@ -1,68 +1,45 @@
 <?php
 
 /** @var yii\web\View $this */
-/** @var yii\bootstrap4\ActiveForm $form */
-/** @var app\models\ContactForm $model */
 
-use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Html;
-use yii\captcha\Captcha;
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
+use yii\bootstrap4\Button;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Serveses;
 
-$this->title = 'Contact';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
-<div class="site-contact">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
+<head>
+    <title>Login V16</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+    <link href="https://fonts.googleapis.com/css?family=DM+Sans:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/util.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
 
-        <div class="alert alert-success">
-            Thank you for contacting us. We will respond to you as soon as possible.
-        </div>
+</head>
+<div class="site-lab2">
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('images/back.jpg');">
+            <div class="wrap-login100 p-t-30 p-b-50" style="margin-top:5%">
+                <span class="login100-form-title p-b-41">
+                    Свяжитесь с нами
+                </span>
 
-        <p>
-            Note that if you turn on the Yii debugger, you should be able
-            to view the mail message on the mail panel of the debugger.
-            <?php if (Yii::$app->mailer->useFileTransport): ?>
-                Because the application is in development mode, the email is not sent but saved as
-                a file under <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
-                Please configure the <code>useFileTransport</code> property of the <code>mail</code>
-                application component to be false to enable email sending.
-            <?php endif; ?>
-        </p>
-
-    <?php else: ?>
-
-        <p>
-            If you have business inquiries or other questions, please fill out the following form to contact us.
-            Thank you.
-        </p>
-
-        <div class="row">
-            <div class="col-lg-5">
-
-                <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
-
-                    <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
-
-                    <?= $form->field($model, 'email') ?>
-
-                    <?= $form->field($model, 'subject') ?>
-
-                    <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
-
-                    <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                        'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
-                    ]) ?>
-
-                    <div class="form-group">
-                        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
-                    </div>
-
-                <?php ActiveForm::end(); ?>
-
+            <div class="bg-white p-3 p-md-5">
+              <h3 class="text-black mb-4">Контактная информация</h3>
+              <ul class="list-unstyled footer-link">
+                <li class="d-block mb-3">
+                  <span class="d-block text-black">Адрес:</span>
+                  <span>г. Ростов-на-Дону, улица Московская, дом 34</span></li>
+                <li class="d-block mb-3"><span class="d-block text-black">Номер телефона:</span><span>+7 000 000 0000</span></li>
+                <li class="d-block mb-3"><span class="d-block text-black">Email:</span><span>info@yourdomain.com</span></li>
+              </ul>
             </div>
-        </div>
-
-    <?php endif; ?>
-</div>
+          </div>

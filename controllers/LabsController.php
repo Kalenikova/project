@@ -6,7 +6,7 @@ use app\models\ComForm;
 use app\models\Author;
 use app\models\Genre;
 use app\models\Books;
-use app\models\NewAuthor;
+use app\models\Record;
 use app\models\Find;
 use app\models\Delete;
 use app\models\Reg;
@@ -28,82 +28,6 @@ class LabsController extends Controller
         return $this->render('info');
     }
 
-    public function actionLab1()
-    {
-        $model = new ComForm();
-        return $this->render('lab1', ['model' => $model]);
-    }
-
-    public function actionLab2()
-    {
-        return $this->render('lab2');
-    }
-
-    public function actionLab3()
-    {
-        return $this->render('lab3');
-    }
-
-    public function actionAuthor()
-    {
-        $model = new Delete();
-        $del = null;
-        $authors = author::find()->all();
-        if ($model->load(Yii::$app->request->post())) {
-            $del = author::deleteAll('id_a = :id_a', [':id_a' => $model->id_a]);
-            $this->refresh();
-        }
-        return $this->render('author', ['authors' => $authors, 'model' => $model, 'del' => $del]);
-    }
-
-    public function actionGenre()
-    {
-        $genres = genre::find()->all();
-        return $this->render('genre', ['genres' => $genres]);
-    }
-
-    public function actionBooks()
-    {
-
-        $books = books::find()->all();
-        $centery = books::find()->where(['between', 'date_writing', '1900', '2001'])->orderby('date_writing')->all();
-        $countb = books::find()->select(['COUNT(title) AS cnt', 'id_a'])->groupBy('id_a')->all();
-        return $this->render('books', ['books' => $books, 'centery' => $centery, 'countb' => $countb]);
-
-
-        /*$model = new Find();
-        if ($model->load(Yii::$app->request->post())) {
-            $books = books::find()->where(['like', 'title', $model->title])->all();
-        } else {
-            $books = books::find()->all();
-        }
-        return $this->render('books', ['books' => $books, 'centery' => $centery, 'countb' => $countb, 'model' => $model]);*/
-    }
-
-
-
-    public function actionNewauthor()
-    {
-        $mod = new NewAuthor();
-        if ($mod->load(Yii::$app->request->post()) && $mod->save()) {
-            return $this->redirect(['labs/author']);
-        } else {
-            return $this->render('newauthor', [
-                'mod' => $mod,
-            ]);
-        }
-    }
-
-    public function actionFind()
-    {
-        $model = new Find();
-        if($model->load(Yii::$app->request->post())){
-        $books = books::find()->where(['like','title',$model->title])->all();
-    } else {
-        $books=books::find()->all();
-    }
-        return $this->render('find', ['model'=>$model, 'books'=>$books]);
-    }
 
     public function actionReg(){
         $mod = new Reg();
@@ -117,4 +41,33 @@ class LabsController extends Controller
         }
         
     }
+
+
+    /*public function actionRole(){
+            $admin = Yii::$app->authManager->createRole('admin');
+            $admin->description = 'Администратор';
+            Yii::$app->authManager->add($admin);
+    
+            $client = Yii::$app->authManager->createRole('client');
+            $client->description = 'Клиент';
+            Yii::$app->authManager->add($client);
+    
+            $permit = Yii::$app->authManager->createPermission('canAdmin');
+            $permit->description = 'Право входа в админку';
+            Yii::$app->authManager->add($permit);
+    
+            $role = Yii::$app->authManager->getRole('admin');
+            $permit= Yii::$app->authManager->getPermission('canAdmin');
+            Yii::$app->authManager->addChild($role, $permit);
+    
+            $userRole = Yii::$app->authManager->getRole('admin');
+            Yii::$app->authManager->assign($userRole, 1);
+
+            $userRole = Yii::$app->authManager->getRole('client');
+            Yii::$app->authManager->assign($userRole, 2);
+            $userRole = Yii::$app->authManager->getRole('client');
+            Yii::$app->authManager->assign($userRole, 4);
+    
+            return 123124;
+        }*/
 }

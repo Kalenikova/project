@@ -20,15 +20,21 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'vova160207',
+        ],        
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'cache' => 'cache',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-            'loginUrl' => 'index.php'
+            'loginUrl' => 'error.php'
         ],
+        
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

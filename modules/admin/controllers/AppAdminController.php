@@ -12,9 +12,15 @@ class AppAdminController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' =>[
                     [
+                        'actions' => ['record'],
                         'allow' => true,
-                        'roles' => ['@']
-                    ]
+                        'roles'=>['admin'],
+                    ],
+                    [
+                        'actions' => ['record'],
+                        'allow' => false,
+                        'roles'=>['*'],
+                    ],
                 ]
             ]
         ];

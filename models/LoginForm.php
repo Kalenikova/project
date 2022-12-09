@@ -19,6 +19,9 @@ class LoginForm extends Model
 
     private $_user = false;
 
+    public static function tableName(){
+        return 'user';
+    }
 
     /**
      * @return array the validation rules.

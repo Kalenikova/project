@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
+use app\models\Record;
 
 class SiteController extends Controller
 {
@@ -20,13 +22,52 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
                 'rules' => [
+                    [
+                        'actions' => ['/admin/record'],
+                        'allow' => true,
+                        'roles'=>['admin'],
+                    ],
+                    [
+                        'actions' => ['record'],
+                        'allow' => true,
+                        'roles'=>['admin']
+                    ],
+                    [
+                        'actions' => ['record'],
+                        'allow' => true,
+                        'roles'=>['@']
+                    ],
+                    [ // последнее правило для тех кому нельзя
+                        'actions' => ['admin'],
+                        'allow' => false,
+                        'roles' => ['@'], // все роли
+                        'denyCallback' => function($rule, $action) {
+                            // и тут уже выбираем куда переадресывать
+                            return $action->controller->redirect('index');
+                        },
+                    ],
+                    [ // последнее правило для тех кому нельзя
+                        'actions' => ['record'],
+                        'allow' => false,
+                        'roles' => ['?'], // все роли
+                        'denyCallback' => function($rule, $action) {
+                            // и тут уже выбираем куда переадресывать
+                            return $action->controller->redirect(['/site/attention']);
+                        },
+                    ],
+                    [
+                        'actions' => ['login','error','index','succes','about','contact','serveses','attention'],
+                        'allow' => true,
+                    ],
+
                     [
                         'actions' => ['logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles'=>['@']
                     ],
+  
+
                 ],
             ],
             'verbs' => [
@@ -64,6 +105,11 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    public function actionError()
+    {
+        return $this->render('error');
+    }
+
     /**
      * Login action.
      *
@@ -77,10 +123,10 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['/site/admin']);
         }
 
-        
+        $model->password = '';
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -134,6 +180,42 @@ class SiteController extends Controller
      * @return string
      */
 
-     
+    public function actionAdmin()
+    {
+        $records = record::find()->all();
+        return $this->render('admin', ['records' => $records]);
+        
+    }
 
+    public function actionRecord()
+    {
+        $model = new Record();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['succes', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('record', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSucces()
+    {
+        return $this->render('succes');
+    }
+
+    public function actionServeses()
+    {
+        return $this->render('serveses');
+    }
+
+    public function actionAttention()
+    {
+        return $this->render('attention');
+    }
 }

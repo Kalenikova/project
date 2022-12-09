@@ -15,7 +15,7 @@ class Reg extends ActiveRecord
 
     public function rules(){
         return[
-            [['username','password'],'required','message' => 'Поле не может быть пустым!'],
+            [['username','password', 'FIO'],'required','message' => 'Поле не может быть пустым!'],
             ['username', 'unique',  'message' => 'Такой пользователь уже существует!']
         ];
     }
